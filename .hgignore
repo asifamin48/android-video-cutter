@@ -3,3 +3,7 @@ syntax: glob
 /bin
 syntax: glob
 bin/*
+syntax: glob
+obj/*
+syntax: regexp
+^libs$
