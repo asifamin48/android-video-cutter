@@ -1,0 +1,41 @@
+MY_PATH:=$(call my-dir)
+
+LOCAL_PATH:= $(MY_PATH)/libavutil
+include $(CLEAR_VARS)
+LOCAL_MODULE := libavutil
+include $(LOCAL_PATH)/../av.mk
+LOCAL_SRC_FILES := $(FFFILES)
+LOCAL_C_INCLUDES := $(LOCAL_PATH) $(LOCAL_PATH)/..
+LOCAL_CFLAGS += $(FFCFLAGS)
+include $(BUILD_STATIC_LIBRARY)
+
+LOCAL_PATH:= $(MY_PATH)/libavcodec
+include $(CLEAR_VARS)
+LOCAL_MODULE := libavcodec
+include $(LOCAL_PATH)/../av.mk
+LOCAL_SRC_FILES := $(FFFILES)
+LOCAL_C_INCLUDES := $(LOCAL_PATH) $(LOCAL_PATH)/..
+LOCAL_CFLAGS += $(FFCFLAGS)
+LOCAL_LDLIBS += -lz
+LOCAL_STATIC_LIBRARIES := libavutil
+include $(BUILD_STATIC_LIBRARY)
+
+LOCAL_PATH:= $(MY_PATH)/libavformat
+include $(CLEAR_VARS)
+LOCAL_MODULE := libavformat
+include $(LOCAL_PATH)/../av.mk
+LOCAL_SRC_FILES := $(FFFILES)
+LOCAL_C_INCLUDES := $(LOCAL_PATH) $(LOCAL_PATH)/..
+LOCAL_CFLAGS += $(FFCFLAGS)
+LOCAL_LDLIBS += -lz
+LOCAL_STATIC_LIBRARIES := libavcodec libavutil
+include $(BUILD_SHARED_LIBRARY)
+
+
+LOCAL_PATH := $(MY_PATH)
+include $(CLEAR_VARS)
+LOCAL_MODULE    := takepics
+LOCAL_SRC_FILES := takepics.c
+LOCAL_SHARED_LIBRARIES := libavformat
+LOCAL_LDLIBS += -lz
+include $(BUILD_SHARED_LIBRARY)
