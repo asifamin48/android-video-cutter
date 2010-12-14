@@ -3,12 +3,31 @@
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
 
+
+void log_message(char* message) {
+	FILE *pFile;
+	char szFilename[32];
+	int y;
+
+	// Open file
+	sprintf(szFilename, "/sdcard/log.txt");
+	pFile = fopen(szFilename, "a");
+	if (pFile == NULL)
+		return;
+
+	// Write header
+	fprintf(pFile, message);
+
+	// Close file
+	fclose(pFile);
+}
+
 void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {
 	FILE *pFile;
 	char szFilename[32];
 	int y;
 
-	log_message("Saving Frame");
+	log_message("Saving Frame\n");
 
 	// Open file
 	sprintf(szFilename, "/sdcard/frame%d.bmp", iFrame);
@@ -27,36 +46,19 @@ void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {
 	fclose(pFile);
 }
 
-void log_message(char* message) {
-	FILE *pFile;
-	char szFilename[32];
-	int y;
-
-	// Open file
-	sprintf(szFilename, "/sdcard/log_message.txt");
-	pFile = fopen(szFilename, "wa");
-	if (pFile == NULL)
-		return;
-
-	// Write header
-	fprintf(pFile, message);
-
-	// Close file
-	fclose(pFile);
-}
-
 JNIEXPORT jint JNICALL Java_com_ruk_tutorials_natives_Natives_takePics(
 		JNIEnv *env, jclass someclass) {
 	av_register_all();
 	AVFormatContext *pFormatCtx;
 
-	log_message("In Main...Just started!!");
+	log_message("I am in Main...Just started!!\n");
 
 	char* filename = "/sdcard/video-2010-12-09-19-17-44.3gp";
+	log_message("After File name");
 	// Open video file
 	if (av_open_input_file(&pFormatCtx, filename, NULL, 0, NULL) != 0)
 		return -1; // Couldn't open file
-	// Retrieve stream information
+//	 Retrieve stream information
 	if (av_find_stream_info(pFormatCtx) < 0)
 		return -1; // Couldn't find stream information
 	int i;
@@ -79,7 +81,7 @@ JNIEXPORT jint JNICALL Java_com_ruk_tutorials_natives_Natives_takePics(
 	// Find the decoder for the video stream
 	pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
 	if (pCodec == NULL) {
-		fprintf(stderr, "Unsupported codec!\n");
+		log_message("Unsupported codec!\n");
 		return -1; // Codec not found
 	}
 	// Open codec
@@ -110,19 +112,18 @@ JNIEXPORT jint JNICALL Java_com_ruk_tutorials_natives_Natives_takePics(
 					SaveFrame(pFrame, pCodecCtx->width, pCodecCtx->height, i);
 			}
 		}
-
-		// Free the packet that was allocated by av_read_frame
-		av_free_packet(&packet);
-
-		// Free the YUV frame
-		av_free(pFrame);
-
-		// Close the codec
-		avcodec_close(pCodecCtx);
-
-		// Close the video file
-		av_close_input_file(pFormatCtx);
-		return 0;
 	}
+	// Free the packet that was allocated by av_read_frame
+	av_free_packet(&packet);
+
+	// Free the YUV frame
+	av_free(pFrame);
+
+	// Close the codec
+	avcodec_close(pCodecCtx);
+
+	// Close the video file
+	av_close_input_file(pFormatCtx);
+	return 0;
 
 }
