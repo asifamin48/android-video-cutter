@@ -1,6 +1,6 @@
-package com.ruk.tutorials;
+package net.avc.video.cutter;
 
-import com.ruk.tutorials.natives.Natives;
+import net.avc.video.cutter.natives.Natives;
 
 import android.app.Activity;
 import android.os.Bundle;
