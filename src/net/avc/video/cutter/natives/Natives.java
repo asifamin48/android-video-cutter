@@ -1,4 +1,4 @@
-package com.ruk.tutorials.natives;
+package net.avc.video.cutter.natives;
 
 public class Natives {
 	public static native int takePics();
