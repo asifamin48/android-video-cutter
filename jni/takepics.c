@@ -46,7 +46,7 @@ void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {
 	fclose(pFile);
 }
 
-JNIEXPORT jint JNICALL Java_com_ruk_tutorials_natives_Natives_takePics(
+JNIEXPORT jint JNICALL Java_net_avc_video_cutter_natives_Natives_takePics(
 		JNIEnv *env, jclass someclass) {
 	av_register_all();
 	AVFormatContext *pFormatCtx;
