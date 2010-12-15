@@ -1,5 +1,5 @@
 #include <jni.h>
-#include "include/com_ruk_tutorials_natives_Natives.h"
+#include "include/net_avc_video_cutter_natives_Natives.h"
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
 
